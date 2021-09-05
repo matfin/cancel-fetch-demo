@@ -1,0 +1,8 @@
+{
+  "name": "cancel-fetch-demo",
+  "version": "1.0.0",
+  "description": "A simple react app to demonstrate cancellable fetch",
+  "main": "index.js",
+  "author": "Matt Finucane",
+  "license": "MIT"
+}
