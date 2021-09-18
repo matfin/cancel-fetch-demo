@@ -12,12 +12,15 @@ export interface Props {
   error: Error | null;
 
   // dispatch
+  cancelUsers: () => void;
   loadUsers: () => void;
 }
 
-const Users = ({ users, pending, error, loadUsers }: Props): JSX.Element => {
-  useEffect((): void => {
+const Users = ({ users, pending, error, cancelUsers, loadUsers }: Props): JSX.Element => {
+  useEffect((): () => void => {
     loadUsers();
+
+    return (): void => cancelUsers()
   }, [loadUsers]);
 
   return (
@@ -44,6 +47,7 @@ const mapStateToProps = (state: CombinedAppState) => ({
 
 export const mapDispatchToProps = {
   loadUsers: UsersState.actions.loadUsersRequest,
+  cancelUsers: UsersState.actions.loadUsersCancel,
 };
 
 const ConnectedUsers = connect(mapStateToProps, mapDispatchToProps)(Users);
