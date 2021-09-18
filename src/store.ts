@@ -3,13 +3,19 @@ import createSagaMiddleware, { SagaMiddleware } from "redux-saga";
 
 import rootSaga from "./sagas";
 import postsState, { PostsState } from "./services/state/posts/posts.state";
+import photosState, { PhotosState } from "./services/state/photos/photos.state";
+import usersState, { UsersState } from "./services/state/users/users.state";
 
 export interface CombinedAppState {
-  posts: PostsState
+  posts: PostsState,
+  photos: PhotosState,
+  users: UsersState,
 }
 
 const rootReducer: Reducer = combineReducers({
-  [postsState.name]: postsState.reducer
+  [postsState.name]: postsState.reducer,
+  [photosState.name]: photosState.reducer,
+  [usersState.name]: usersState.reducer,
 });
 
 export const createAppStore = (): Store => {

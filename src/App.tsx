@@ -1,49 +1,52 @@
-import { useEffect } from "react";
-import { connect } from 'react-redux';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
 
-import { CombinedAppState } from './store';
+import Posts from './scenes/posts';
+import Photos from './scenes/photos';
+import Users from './scenes/users';
 
-import PostsState, { Post } from "./services/state/posts/posts.state";
+export const App = (): JSX.Element => (
+  <Router>
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/photos">
+              Photos
+            </Link>
+          </li>
+          <li>
+            <Link to="/users">
+              Users
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <section>
+      <Switch>
+        <Route path="/" exact>
+          <Posts />
+        </Route>
+        <Route path="/photos" exact>
+          <Photos />
+        </Route>
+        <Route path="/users" exact>
+          <Users />
+        </Route>
+      </Switch>
+    </section>
+  </Router>
+);
 
-export interface Props {
-  // state
-  posts: Post[];
-  pending: boolean;
-  error: Error | null;
+export default App;
 
-  // dispatch
-  loadPosts: () => void;
-}
-
-export const App = ({ posts, pending, error, loadPosts }: Props): JSX.Element => {
-  useEffect((): void => {
-    loadPosts();
-  }, [loadPosts]);
-
-  return (
-    <>
-      <h1>A list of posts!</h1>
-      {pending
-        ? <p>Please wait...</p>
-        : (
-          <ul>
-            {posts.map(({ id, title }: Post): JSX.Element => <li key={id}>{title}</li>)}
-          </ul>
-        )
-      }
-      {error && <p>There was an error</p>}
-    </>
-  );
-};
-
-const mapStateToProps = (state: CombinedAppState) => ({
-  posts: PostsState.selectors.getAllPostsFromState(state),
-  pending: PostsState.selectors.getIsPending(state),
-  error: PostsState.selectors.getError(state),
-});
-
-export const mapDispatchToProps = {
-  loadPosts: PostsState.actions.loadPostsRequest,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -17,7 +17,7 @@ export function* handleLoadPosts() {
 
 function* rootSaga() {
   yield all([
-    takeLatest(PostsState.actions.loadPostsRequest, handleLoadPosts)
+    takeLatest(PostsState.types.FETCH_POSTS_REQUEST, handleLoadPosts)
   ])
 }
 
