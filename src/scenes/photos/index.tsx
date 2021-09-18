@@ -12,13 +12,16 @@ export interface Props {
   error: Error | null;
 
   // dispatch
+  cancelPhotos: () => void;
   loadPhotos: () => void;
 }
 
-const Photos = ({ photos, pending, error, loadPhotos }: Props): JSX.Element => {
-  useEffect((): void => {
+const Photos = ({ photos, pending, error, cancelPhotos, loadPhotos }: Props): JSX.Element => {
+  useEffect((): () => void => {
     loadPhotos();
-  }, [loadPhotos]);
+
+    return (): void => cancelPhotos();
+  }, [loadPhotos, cancelPhotos]);
 
   return (
     <>
@@ -44,6 +47,7 @@ const mapStateToProps = (state: CombinedAppState) => ({
 
 export const mapDispatchToProps = {
   loadPhotos: PhotosState.actions.loadPhotosRequest,
+  cancelPhotos: PhotosState.actions.loadPhotosCancel,
 };
 
 const ConnectedPhotos = connect(mapStateToProps, mapDispatchToProps)(Photos);

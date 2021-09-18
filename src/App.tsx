@@ -20,13 +20,13 @@ export const App = (): JSX.Element => (
             </Link>
           </li>
           <li>
-            <Link to="/photos">
-              Photos
+            <Link to="/users">
+              Users
             </Link>
           </li>
           <li>
-            <Link to="/users">
-              Users
+            <Link to="/photos">
+              Photos
             </Link>
           </li>
         </ul>

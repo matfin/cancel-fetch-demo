@@ -12,13 +12,16 @@ export interface Props {
   error: Error | null;
 
   // dispatch
+  cancelPosts: () => void;
   loadPosts: () => void;
 }
 
-const Posts = ({ posts, pending, error, loadPosts }: Props): JSX.Element => {
-  useEffect((): void => {
+const Posts = ({ posts, pending, error, cancelPosts, loadPosts }: Props): JSX.Element => {
+  useEffect((): () => void => {
     loadPosts();
-  }, [loadPosts]);
+
+    return (): void => cancelPosts();
+  }, [loadPosts, cancelPosts]);
 
   return (
     <>
@@ -43,6 +46,7 @@ const mapStateToProps = (state: CombinedAppState) => ({
 });
 
 export const mapDispatchToProps = {
+  cancelPosts: PostsState.actions.loadPostsCancel,
   loadPosts: PostsState.actions.loadPostsRequest,
 };
 

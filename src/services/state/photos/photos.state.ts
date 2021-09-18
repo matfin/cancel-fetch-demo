@@ -30,12 +30,17 @@ export type PhotosState = {
 // constants
 const reducerName = "photos";
 const FETCH_PHOTOS_REQUEST = `${reducerName}/FETCH_PHOTOS_REQUEST`;
+const FETCH_PHOTOS_CANCEL = `${reducerName}/FETCH_PHOTOS_CANCEL`;
 const FETCH_PHOTOS_SUCCESS = `${reducerName}/FETCH_PHOTOS_SUCCESS`;
 const FETCH_PHOTOS_FAILURE = `${reducerName}/FETCH_PHOTOS_FAILURE`;
 
 // actions
 const loadPhotosRequest = (): PhotosAction => ({
   type: FETCH_PHOTOS_REQUEST,
+});
+
+const loadPhotosCancel = (): PhotosAction => ({
+  type: FETCH_PHOTOS_CANCEL,
 });
 
 const loadPhotosSuccess = (photos: Photo[]): PhotosAction => ({
@@ -94,11 +99,13 @@ const getError = createSelector(getPhotosState, ({ error }: PhotosState) => erro
 const photosState = {
   actions: {
     loadPhotosRequest,
+    loadPhotosCancel,
     loadPhotosSuccess,
     loadPhotosFailure,
   },
   types: {
     FETCH_PHOTOS_REQUEST,
+    FETCH_PHOTOS_CANCEL,
     FETCH_PHOTOS_SUCCESS,
     FETCH_PHOTOS_FAILURE,
   },

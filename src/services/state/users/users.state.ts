@@ -46,12 +46,17 @@ export type UsersState = {
 // constants
 const reducerName = "users";
 const FETCH_USERS_REQUEST = `${reducerName}/FETCH_USERS_REQUEST`;
+const FETCH_USERS_CANCEL = `${reducerName}/FETCH_USERS_CANCEL`;
 const FETCH_USERS_SUCCESS = `${reducerName}/FETCH_USERS_SUCCESS`;
 const FETCH_USERS_FAILURE = `${reducerName}/FETCH_USERS_FAILURE`;
 
 // actions
 const loadUsersRequest = (): UsersAction => ({
   type: FETCH_USERS_REQUEST,
+});
+
+const loadUsersCancel = (): UsersAction => ({
+  type: FETCH_USERS_CANCEL,
 });
 
 const loadUsersSuccess = (users: User[]): UsersAction => ({
@@ -119,11 +124,13 @@ const getError = createSelector(
 const usersState = {
   actions: {
     loadUsersRequest,
+    loadUsersCancel,
     loadUsersSuccess,
     loadUsersFailure,
   },
   types: {
     FETCH_USERS_REQUEST,
+    FETCH_USERS_CANCEL,
     FETCH_USERS_SUCCESS,
     FETCH_USERS_FAILURE,
   },

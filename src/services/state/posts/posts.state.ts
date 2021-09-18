@@ -29,12 +29,17 @@ export type PostsState = {
 // constants
 const reducerName = "posts";
 const FETCH_POSTS_REQUEST = `${reducerName}/FETCH_POSTS_REQUEST`;
+const FETCH_POSTS_CANCEL = `${reducerName}/FETCH_POSTS_CANCEL`;
 const FETCH_POSTS_SUCCESS = `${reducerName}/FETCH_POSTS_SUCCESS`;
 const FETCH_POSTS_FAILURE = `${reducerName}/FETCH_POSTS_FAILURE`;
 
 // actions
 const loadPostsRequest = (): PostsAction => ({
   type: FETCH_POSTS_REQUEST,
+});
+
+const loadPostsCancel = (): PostsAction => ({
+  type: FETCH_POSTS_CANCEL,
 });
 
 const loadPostsSuccess = (posts: Post[]): PostsAction => ({
@@ -93,11 +98,13 @@ const getError = createSelector(getPostsState, ({ error }: PostsState) => error)
 const postsState = {
   actions: {
     loadPostsRequest,
+    loadPostsCancel,
     loadPostsSuccess,
     loadPostsFailure,
   },
   types: {
     FETCH_POSTS_REQUEST,
+    FETCH_POSTS_CANCEL,
     FETCH_POSTS_SUCCESS,
     FETCH_POSTS_FAILURE,
   },
