@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+# Cancel fetch demo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a small demo project in React that demonstrates the use of [Abortable fetch](https://developers.google.com/web/updates/2017/09/abortable-fetch).
 
-## Available Scripts
+## What's the use case for this?
 
-In the project directory, you can run:
+If you have an app with several different sections of the UI, making use of abortable fetch will allow you to cancel any pending API calls made to fetch data when you land on a view.
 
-### `yarn start`
+In this case, we have a list of users, photos and posts. As we navigate between these sections and land on a new one, a call is made to fetch the relevant data.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+If we quickly navigate away to another section and the call to fetch data is still pending, then that call will be cancelled before it's completed.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+This is very useful to ensure good UI performance and prevent any unnecessary API calls from being made.
 
-### `yarn test`
+## How is this done?
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+We make use of [Redux-Saga](https://redux-saga.js.org/) and trigger a call to an action when the user lands on a view.
 
-### `yarn build`
+This action is picked up by Redux-Saga and an API call is made using a simple get utility function we created.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Inside this `get` call, we pass in an Abort Controller signal linked specifically to that call and if we call `signal.abort()`, it cancels the call and the subsequent processig if it has reached that stage.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Inside the root saga for each of the users, posts and photos sagas, we fork the task to fetch the data.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Meanwhile, inside the `useEffect` calls for each of the container components for users, posts, photos etc, we call to cancel any pending calls via another action we have created.
 
-### `yarn eject`
+If the saga detects this cancellation, we cancel the fork and the generator function that calls to fetch the data receives the signal to cancel.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+We can then call `signal.abort()` and cancel the api call made.

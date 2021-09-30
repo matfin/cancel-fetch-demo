@@ -21,7 +21,7 @@ const Photos = ({ photos, pending, error, cancelPhotos, loadPhotos }: Props): JS
     loadPhotos();
 
     return (): void => cancelPhotos();
-  }, [loadPhotos, cancelPhotos]);
+  }, []);
 
   return (
     <>

@@ -17,10 +17,13 @@ export const get = async <T>({
       method,
       signal,
     });
-    const response = await fetch(request);
-    const data: T = await response.json();
+    const response: Response = await fetch(request);
 
-    return data;
+    if(!response.ok) {
+      throw new Error(response.statusText)
+    }
+
+    return await response.json() as T;
   } catch (error) {
     return null;
   }

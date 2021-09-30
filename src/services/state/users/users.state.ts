@@ -1,7 +1,6 @@
 import { createSelector } from "reselect";
 
 // types
-
 export type User = {
   id: number;
   name: string;

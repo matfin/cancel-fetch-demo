@@ -21,7 +21,7 @@ const Posts = ({ posts, pending, error, cancelPosts, loadPosts }: Props): JSX.El
     loadPosts();
 
     return (): void => cancelPosts();
-  }, [loadPosts, cancelPosts]);
+  }, []);
 
   return (
     <>

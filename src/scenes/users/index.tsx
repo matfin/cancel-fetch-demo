@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useEffect } from "react";
+import { connect } from "react-redux";
 
-import { CombinedAppState } from '../../store';
+import { CombinedAppState } from "../../store";
 
-import UsersState, { User } from '../../services/state/users/users.state'
+import UsersState, { User } from "../../services/state/users/users.state";
 
 export interface Props {
   // state
@@ -16,28 +16,39 @@ export interface Props {
   loadUsers: () => void;
 }
 
-const Users = ({ users, pending, error, cancelUsers, loadUsers }: Props): JSX.Element => {
-  useEffect((): () => void => {
+const UserTile = ({ name }: { name: string }): JSX.Element => <li>{name}</li>;
+
+const Users = ({
+  users,
+  pending,
+  error,
+  cancelUsers,
+  loadUsers,
+}: Props): JSX.Element => {
+  useEffect((): (() => void) => {
     loadUsers();
 
-    return (): void => cancelUsers()
-  }, [loadUsers]);
+    return (): void => cancelUsers();
+  }, []);
 
   return (
     <>
       <h1>A list of users!</h1>
-      {pending
-        ? <p>Please wait...</p>
-        : (
-          <ul>
-            {users.map(({ id, name }: User): JSX.Element => <li key={id}>{name}</li>)}
-          </ul>
-        )
-      }
+      {pending ? (
+        <p>Please wait...</p>
+      ) : (
+        <ul>
+          {users.map(
+            ({ id, name }: User): JSX.Element => (
+              <UserTile key={id} name={name} />
+            )
+          )}
+        </ul>
+      )}
       {error && <p>There was an error</p>}
     </>
   );
-}
+};
 
 const mapStateToProps = (state: CombinedAppState) => ({
   users: UsersState.selectors.getAllUsersFromState(state),
