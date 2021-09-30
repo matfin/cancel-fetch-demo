@@ -1,3 +1,4 @@
+import { StrictEffect, Task } from "@redux-saga/types";
 import { call, cancel, cancelled, fork, put, take } from "redux-saga/effects";
 
 import Endpoints from "../../../endpoints";
@@ -5,13 +6,13 @@ import { get } from "../network/api";
 
 import PhotosState, { Photo } from "./photos.state";
 
-export function* handleLoadPhotos(): Generator {
+export function* handleLoadPhotos(): Generator<StrictEffect> {
   const abortController: AbortController = new AbortController();
 
   try {
-    const photos: Photo[] | any = yield call(get, { url: Endpoints.photos, signal: abortController.signal });
+    const photos: unknown = yield call(get, { url: Endpoints.photos, signal: abortController.signal });
 
-    yield put(PhotosState.actions.loadPhotosSuccess(photos));
+    yield put(PhotosState.actions.loadPhotosSuccess(photos as Photo[]));
   } catch (error) {
     yield put(PhotosState.actions.loadPhotosFailure(error as Error));
   } finally {
@@ -21,13 +22,15 @@ export function* handleLoadPhotos(): Generator {
   }
 }
 
-function* rootSaga(): Generator {
+function* rootSaga(): Generator<StrictEffect, number, Task> {
   while(yield take(PhotosState.types.FETCH_PHOTOS_REQUEST)) {
     const fetchTask = yield fork(handleLoadPhotos);
 
     yield take(PhotosState.types.FETCH_PHOTOS_CANCEL);
-    yield cancel(fetchTask as any);
+    yield cancel(fetchTask);
   }
+
+  return 0;
 }
 
 export default rootSaga;

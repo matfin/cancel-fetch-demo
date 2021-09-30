@@ -1,3 +1,4 @@
+import { StrictEffect, Task } from "@redux-saga/types";
 import { call, cancel, cancelled, fork, put, take } from "redux-saga/effects";
 
 import Endpoints from "../../../endpoints";
@@ -5,13 +6,13 @@ import { get } from "../network/api";
 
 import UsersState, { User } from "./users.state";
 
-export function* handleLoadUsers(): Generator {
+export function* handleLoadUsers(): Generator<StrictEffect> {
   const abortController: AbortController = new AbortController();
 
   try {
-    const photos: User[] | any = yield call(get, { url: Endpoints.users, signal: abortController.signal });
+    const users: unknown = yield call(get, { url: Endpoints.users, signal: abortController.signal });
 
-    yield put(UsersState.actions.loadUsersSuccess(photos));
+    yield put(UsersState.actions.loadUsersSuccess(users as User[]));
   } catch (error) {
     yield put(UsersState.actions.loadUsersFailure(error as Error));
   } finally {
@@ -21,13 +22,15 @@ export function* handleLoadUsers(): Generator {
   }
 }
 
-function* rootSaga(): Generator {
+function* rootSaga(): Generator<StrictEffect, number, Task> {
   while(yield take(UsersState.types.FETCH_USERS_REQUEST)) {
-    const fetchTask = yield fork(handleLoadUsers);
+    const fetchTask: Task = yield fork(handleLoadUsers);
 
     yield take(UsersState.types.FETCH_USERS_CANCEL);
-    yield cancel(fetchTask as any);
+    yield cancel(fetchTask);
   }
+
+  return 0;
 }
 
 export default rootSaga;
