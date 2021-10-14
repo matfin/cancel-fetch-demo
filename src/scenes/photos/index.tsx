@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { CombinedAppState } from '../../store';
+import { CombinedAppState } from 'store';
 
-import PhotosState, { Photo } from '../../services/state/photos/photos.state'
+import PhotosState, { Photo } from 'services/state/photos/photos.state';
 
 export interface Props {
   // state
@@ -16,28 +16,37 @@ export interface Props {
   loadPhotos: () => void;
 }
 
-const Photos = ({ photos, pending, error, cancelPhotos, loadPhotos }: Props): JSX.Element => {
-  useEffect((): () => void => {
+export const Photos = ({
+  photos,
+  pending,
+  error,
+  cancelPhotos,
+  loadPhotos,
+}: Props): JSX.Element => {
+  useEffect((): (() => void) => {
     loadPhotos();
 
     return (): void => cancelPhotos();
-  }, []);
+  }, [loadPhotos, cancelPhotos]);
 
   return (
     <>
       <h1>A list of photos!</h1>
-      {pending
-        ? <p>Please wait...</p>
-        : (
-          <ul>
-            {photos.map(({ id, thumbnailUrl, title }: Photo): JSX.Element => <img loading="lazy" alt={title} src={thumbnailUrl} key={id} />)}
-          </ul>
-        )
-      }
+      {pending ? (
+        <p>Please wait...</p>
+      ) : (
+        <ul>
+          {photos.map(
+            ({ id, thumbnailUrl, title }: Photo): JSX.Element => (
+              <img loading="lazy" alt={title} src={thumbnailUrl} key={id} />
+            )
+          )}
+        </ul>
+      )}
       {error && <p>There was an error</p>}
     </>
   );
-}
+};
 
 const mapStateToProps = (state: CombinedAppState) => ({
   photos: PhotosState.selectors.getAllPhotosFromState(state),
@@ -45,7 +54,7 @@ const mapStateToProps = (state: CombinedAppState) => ({
   error: PhotosState.selectors.getError(state),
 });
 
-export const mapDispatchToProps = {
+const mapDispatchToProps = {
   loadPhotos: PhotosState.actions.loadPhotosRequest,
   cancelPhotos: PhotosState.actions.loadPhotosCancel,
 };

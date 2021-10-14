@@ -1,5 +1,5 @@
 export enum Methods {
-  GET = "get",
+  GET = 'get',
 }
 
 export const get = async <T>({
@@ -13,17 +13,17 @@ export const get = async <T>({
 }): Promise<T | null> => {
   try {
     const request: Request = new Request(url, {
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
       method,
       signal,
     });
     const response: Response = await fetch(request);
 
-    if(!response.ok) {
-      throw new Error(response.statusText)
+    if (!response.ok) {
+      throw new Error(response.statusText);
     }
 
-    return await response.json() as T;
+    return (await response.json()) as T;
   } catch (error) {
     return null;
   }

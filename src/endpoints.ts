@@ -1,6 +1,6 @@
 type Endpoints = {
-  [index: string]: string
-}
+  [index: string]: string;
+};
 
 const endpoints: Endpoints = {
   posts: `https://jsonplaceholder.typicode.com/posts`,

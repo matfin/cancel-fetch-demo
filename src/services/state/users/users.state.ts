@@ -1,4 +1,4 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
 // types
 export type User = {
@@ -14,15 +14,15 @@ export type User = {
     geo: {
       lat: string;
       lng: string;
-    }
+    };
   };
   phone: string;
   website: string;
   company: {
     name: string;
     catchPhrase: string;
-    bs: string
-  }
+    bs: string;
+  };
 };
 
 export type Payload = {
@@ -39,11 +39,11 @@ export type UsersAction = {
 export type UsersState = {
   users: User[];
   pending: boolean;
-  error: Error | null;
+  error?: Error | null;
 };
 
 // constants
-const reducerName = "users";
+const reducerName = 'users';
 const FETCH_USERS_REQUEST = `${reducerName}/FETCH_USERS_REQUEST`;
 const FETCH_USERS_CANCEL = `${reducerName}/FETCH_USERS_CANCEL`;
 const FETCH_USERS_SUCCESS = `${reducerName}/FETCH_USERS_SUCCESS`;
@@ -69,7 +69,7 @@ const loadUsersFailure = (error: Error): UsersAction => ({
 });
 
 // reducer
-const initialState: UsersState = {
+export const initialState: UsersState = {
   users: [],
   pending: false,
   error: null,

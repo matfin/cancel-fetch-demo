@@ -1,10 +1,10 @@
-import { StrictEffect, Task } from "@redux-saga/types";
-import { call, cancel, cancelled, fork, put, take } from "redux-saga/effects";
+import { StrictEffect, Task } from '@redux-saga/types';
+import { call, cancel, cancelled, fork, put, take } from 'redux-saga/effects';
 
-import Endpoints from "../../../endpoints";
-import { get } from "../network/api";
+import Endpoints from '../../../endpoints';
+import { get } from '../network/api';
 
-import PostsState, { Post } from "./posts.state";
+import PostsState, { Post } from './posts.state';
 
 export function* handleLoadPosts(): Generator<StrictEffect> {
   const abortController: AbortController = new AbortController();
@@ -25,8 +25,8 @@ export function* handleLoadPosts(): Generator<StrictEffect> {
   }
 }
 
-function* rootSaga (): Generator<StrictEffect, number, Task> {
-  while(yield take(PostsState.types.FETCH_POSTS_REQUEST)) {
+function* rootSaga(): Generator<StrictEffect, number, Task> {
+  while (yield take(PostsState.types.FETCH_POSTS_REQUEST)) {
     const fetchTask = yield fork(handleLoadPosts);
 
     yield take(PostsState.types.FETCH_POSTS_CANCEL);

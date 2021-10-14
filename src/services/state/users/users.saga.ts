@@ -1,16 +1,19 @@
-import { StrictEffect, Task } from "@redux-saga/types";
-import { call, cancel, cancelled, fork, put, take } from "redux-saga/effects";
+import { StrictEffect, Task } from '@redux-saga/types';
+import { call, cancel, cancelled, fork, put, take } from 'redux-saga/effects';
 
-import Endpoints from "../../../endpoints";
-import { get } from "../network/api";
+import Endpoints from '../../../endpoints';
+import { get } from '../network/api';
 
-import UsersState, { User } from "./users.state";
+import UsersState, { User } from './users.state';
 
 export function* handleLoadUsers(): Generator<StrictEffect> {
   const abortController: AbortController = new AbortController();
 
   try {
-    const users: unknown = yield call(get, { url: Endpoints.users, signal: abortController.signal });
+    const users: unknown = yield call(get, {
+      url: Endpoints.users,
+      signal: abortController.signal,
+    });
 
     yield put(UsersState.actions.loadUsersSuccess(users as User[]));
   } catch (error) {
@@ -23,7 +26,7 @@ export function* handleLoadUsers(): Generator<StrictEffect> {
 }
 
 function* rootSaga(): Generator<StrictEffect, number, Task> {
-  while(yield take(UsersState.types.FETCH_USERS_REQUEST)) {
+  while (yield take(UsersState.types.FETCH_USERS_REQUEST)) {
     const fetchTask: Task = yield fork(handleLoadUsers);
 
     yield take(UsersState.types.FETCH_USERS_CANCEL);
