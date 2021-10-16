@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 
-import { CombinedAppState } from "../../store";
+import { CombinedAppState } from '../../store';
 
-import UsersState, { User } from "../../services/state/users/users.state";
+import UsersState, { User } from '../../services/state/users/users.state';
 
 export interface Props {
   // state
@@ -18,7 +18,7 @@ export interface Props {
 
 const UserTile = ({ name }: { name: string }): JSX.Element => <li>{name}</li>;
 
-const Users = ({
+export const Users = ({
   users,
   pending,
   error,
@@ -29,7 +29,7 @@ const Users = ({
     loadUsers();
 
     return (): void => cancelUsers();
-  }, []);
+  }, [loadUsers, cancelUsers]);
 
   return (
     <>

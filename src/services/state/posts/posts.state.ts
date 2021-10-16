@@ -1,4 +1,4 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
 // types
 
@@ -23,11 +23,11 @@ export type PostsAction = {
 export type PostsState = {
   posts: Post[];
   pending: boolean;
-  error: Error | null;
+  error?: Error | null;
 };
 
 // constants
-const reducerName = "posts";
+const reducerName = 'posts';
 const FETCH_POSTS_REQUEST = `${reducerName}/FETCH_POSTS_REQUEST`;
 const FETCH_POSTS_CANCEL = `${reducerName}/FETCH_POSTS_CANCEL`;
 const FETCH_POSTS_SUCCESS = `${reducerName}/FETCH_POSTS_SUCCESS`;
@@ -53,7 +53,7 @@ const loadPostsFailure = (error: Error): PostsAction => ({
 });
 
 // reducer
-const initialState: PostsState = {
+export const initialState: PostsState = {
   posts: [],
   pending: false,
   error: null,
@@ -91,9 +91,18 @@ const reducer = (state = initialState, action: PostsAction) => {
 
 // selectors
 const getPostsState = ({ posts }: { posts: PostsState }) => posts;
-const getAllPostsFromState = createSelector(getPostsState, ({ posts }: PostsState) => posts);
-const getIsPending = createSelector(getPostsState, ({ pending }: PostsState) => pending);
-const getError = createSelector(getPostsState, ({ error }: PostsState) => error);
+const getAllPostsFromState = createSelector(
+  getPostsState,
+  ({ posts }: PostsState) => posts
+);
+const getIsPending = createSelector(
+  getPostsState,
+  ({ pending }: PostsState) => pending
+);
+const getError = createSelector(
+  getPostsState,
+  ({ error }: PostsState) => error
+);
 
 const postsState = {
   actions: {

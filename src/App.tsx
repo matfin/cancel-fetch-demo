@@ -1,13 +1,9 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import Posts from './scenes/posts';
-import Photos from './scenes/photos';
-import Users from './scenes/users';
+import Posts from 'scenes/posts';
+import Photos from 'scenes/photos';
+import Users from 'scenes/users';
 
 export const App = (): JSX.Element => (
   <Router>
@@ -15,19 +11,13 @@ export const App = (): JSX.Element => (
       <nav>
         <ul>
           <li>
-            <Link to="/">
-              Home
-            </Link>
+            <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/users">
-              Users
-            </Link>
+            <Link to="/users">Users</Link>
           </li>
           <li>
-            <Link to="/photos">
-              Photos
-            </Link>
+            <Link to="/photos">Photos</Link>
           </li>
         </ul>
       </nav>
@@ -49,4 +39,3 @@ export const App = (): JSX.Element => (
 );
 
 export default App;
-

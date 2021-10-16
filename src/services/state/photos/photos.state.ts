@@ -1,4 +1,4 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
 // types
 
@@ -24,11 +24,11 @@ export type PhotosAction = {
 export type PhotosState = {
   photos: Photo[];
   pending: boolean;
-  error: Error | null;
+  error?: Error | null;
 };
 
 // constants
-const reducerName = "photos";
+const reducerName = 'photos';
 const FETCH_PHOTOS_REQUEST = `${reducerName}/FETCH_PHOTOS_REQUEST`;
 const FETCH_PHOTOS_CANCEL = `${reducerName}/FETCH_PHOTOS_CANCEL`;
 const FETCH_PHOTOS_SUCCESS = `${reducerName}/FETCH_PHOTOS_SUCCESS`;
@@ -54,13 +54,16 @@ const loadPhotosFailure = (error: Error): PhotosAction => ({
 });
 
 // reducer
-const initialState: PhotosState = {
+export const initialState: PhotosState = {
   photos: [],
   pending: false,
   error: null,
 };
 
-const reducer = (state = initialState, action: PhotosAction) => {
+const reducer = (
+  state: PhotosState = initialState,
+  action: PhotosAction
+): PhotosState => {
   const { type, payload, error } = action;
 
   switch (type) {
@@ -68,6 +71,7 @@ const reducer = (state = initialState, action: PhotosAction) => {
       return {
         ...state,
         pending: true,
+        error: null,
       };
     }
     case FETCH_PHOTOS_SUCCESS: {
@@ -75,13 +79,14 @@ const reducer = (state = initialState, action: PhotosAction) => {
         ...state,
         pending: false,
         photos: payload?.photos ?? [],
+        error: null,
       };
     }
     case FETCH_PHOTOS_FAILURE: {
       return {
         ...state,
         pending: false,
-        error,
+        error: error,
       };
     }
     default: {
@@ -92,9 +97,18 @@ const reducer = (state = initialState, action: PhotosAction) => {
 
 // selectors
 const getPhotosState = ({ photos }: { photos: PhotosState }) => photos;
-const getAllPhotosFromState = createSelector(getPhotosState, ({ photos }: PhotosState) => photos);
-const getIsPending = createSelector(getPhotosState, ({ pending }: PhotosState) => pending);
-const getError = createSelector(getPhotosState, ({ error }: PhotosState) => error);
+const getAllPhotosFromState = createSelector(
+  getPhotosState,
+  ({ photos }: PhotosState) => photos
+);
+const getIsPending = createSelector(
+  getPhotosState,
+  ({ pending }: PhotosState) => pending
+);
+const getError = createSelector(
+  getPhotosState,
+  ({ error }: PhotosState) => error
+);
 
 const photosState = {
   actions: {
